@@ -3,15 +3,6 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-const URL = 'https://api.github.com/users/allisonhomem';
-
-axios.get(URL)
-     .then(res => {
-       console.log(res.data);
-     })
-     .catch(err => {
-       debugger
-     })
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -67,3 +58,58 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+
+const URL = 'https://api.github.com/users/allisonhomem';
+
+axios.get(URL)
+     .then(res => {
+       console.log(res.data);
+     })
+     .catch(err => {
+       debugger
+     })
+
+function createCard(object){
+  let card = document.createElement('div');
+  let cardInfo = document.createElement('div');
+  let profilePic = document.createElement('img');
+  let name = document.createElement('h3');
+  let userName = document.createElement('p');
+  let location = document.createElement('p');
+  let profile = document.createElement('p');
+  let followers = document.createElement('p');
+  let following = document.createElement('p');
+  let bio = document.createElement('p');
+  let profileLink = document.createElement('a');
+
+  card.classList.add('card');
+  card.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
+
+  profilePic.setAttribute('src', object.data[avatar_url]);
+  profileLink.setAttribute('href', object.data[html_url]);
+
+  name.textContent = object.data[name];
+  userName.textContent = object.data[login];
+  location.textContent = `Location: ${object.data[location]}`;
+  profile.textContent = `Profile:`;
+  profileLink.textContent = object.data[html_url];
+  followers.textContent = `Followers: ${object.data[followers]}`;
+  following.textContent = `Following: ${object.data[following]}`;
+  bio.textContent = `Bio: ${object.data[bio]}`;
+
+  card.appendChild(profilePic);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
