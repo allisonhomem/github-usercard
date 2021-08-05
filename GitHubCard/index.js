@@ -3,6 +3,15 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+const URL = 'https://api.github.com/users/allisonhomem';
+
+axios.get(URL)
+     .then(res => {
+       console.log(res.data);
+     })
+     .catch(err => {
+       debugger
+     })
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
