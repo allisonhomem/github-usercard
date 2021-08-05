@@ -1,3 +1,4 @@
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -28,8 +29,6 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -50,11 +49,77 @@ const followersArray = [];
     </div>
 */
 
-/*
-  List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
-*/
+
+
+//Variables and such
+let theURL = 'https://api.github.com/users/';
+const myUserName = 'allisonhomem';
+const myURL = theURL + myUserName;
+let cards = document.querySelector('.cards');
+const friendssArray = ['stevenjhomem', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+
+//Function that grabs user data by URL and then calls the card creator function and appends the card to the html
+function addCard(webAddress) {
+  return axios.get(webAddress)
+     .then(res => {
+       console.log(res['data']);
+       cards.appendChild(createCard(res['data']));
+     })
+     .catch(err => {
+       debugger
+     });
+    }
+
+//Card-creating function 
+function createCard(object){
+
+  let card = document.createElement('div');
+  let cardInfo = document.createElement('div');
+  let profilePic = document.createElement('img');
+  let name = document.createElement('h3');
+  let userName = document.createElement('p');
+  let location = document.createElement('p');
+  let profile = document.createElement('p');
+  let followers = document.createElement('p');
+  let following = document.createElement('p');
+  let bio = document.createElement('p');
+  let profileLink = document.createElement('a');
+
+  card.classList.add('card');
+  card.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
+
+  profilePic.setAttribute('src', object['avatar_url']);
+  profileLink.setAttribute('href', object['html_url']);
+
+  name.textContent = object['name'];
+  userName.textContent = object['login'];
+  location.textContent = `Location: ${object['location']}`;
+  profile.textContent = `Profile:`;
+  profileLink.textContent = object['html_url'];
+  followers.textContent = `Followers: ${object['followers']}`;
+  following.textContent = `Following: ${object['following']}`;
+  bio.textContent = `Bio: ${object['bio']}`;
+
+  card.appendChild(profilePic);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
+
+//Invocations of the Card adding function
+addCard(myURL);
+
+friendssArray.forEach((item) => {
+  addCard(theURL + item);
+})
