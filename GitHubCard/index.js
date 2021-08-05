@@ -1,3 +1,4 @@
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -28,8 +29,6 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -50,27 +49,31 @@ const followersArray = [];
     </div>
 */
 
-/*
-  List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
-*/
 
 
-const URL = 'https://api.github.com/users/allisonhomem';
+//Variables and such
+let theURL = 'https://api.github.com/users/';
+const myUserName = 'allisonhomem';
+const myURL = theURL + myUserName;
+let cards = document.querySelector('.cards');
+const friendssArray = ['stevenjhomem', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
-axios.get(URL)
+
+//Function that grabs user data by URL and then calls the card creator function and appends the card to the html
+function addCard(webAddress) {
+  return axios.get(webAddress)
      .then(res => {
-       console.log(res.data);
+       console.log(res['data']);
+       cards.appendChild(createCard(res['data']));
      })
      .catch(err => {
        debugger
-     })
+     });
+    }
 
+//Card-creating function 
 function createCard(object){
+
   let card = document.createElement('div');
   let cardInfo = document.createElement('div');
   let profilePic = document.createElement('img');
@@ -88,17 +91,17 @@ function createCard(object){
   name.classList.add('name');
   userName.classList.add('username');
 
-  profilePic.setAttribute('src', object.data[avatar_url]);
-  profileLink.setAttribute('href', object.data[html_url]);
+  profilePic.setAttribute('src', object['avatar_url']);
+  profileLink.setAttribute('href', object['html_url']);
 
-  name.textContent = object.data[name];
-  userName.textContent = object.data[login];
-  location.textContent = `Location: ${object.data[location]}`;
+  name.textContent = object['name'];
+  userName.textContent = object['login'];
+  location.textContent = `Location: ${object['location']}`;
   profile.textContent = `Profile:`;
-  profileLink.textContent = object.data[html_url];
-  followers.textContent = `Followers: ${object.data[followers]}`;
-  following.textContent = `Following: ${object.data[following]}`;
-  bio.textContent = `Bio: ${object.data[bio]}`;
+  profileLink.textContent = object['html_url'];
+  followers.textContent = `Followers: ${object['followers']}`;
+  following.textContent = `Following: ${object['following']}`;
+  bio.textContent = `Bio: ${object['bio']}`;
 
   card.appendChild(profilePic);
   card.appendChild(cardInfo);
@@ -113,3 +116,10 @@ function createCard(object){
 
   return card;
 }
+
+//Invocations of the Card adding function
+addCard(myURL);
+
+friendssArray.forEach((item) => {
+  addCard(theURL + item);
+})
